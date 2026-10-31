@@ -1,0 +1,83 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chef - Trợ lý nấu ăn</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="header">
+        <div class="logo">🥑 AI CHEF</div>
+        <p>Your personal AI cooking assistant</p>
+    </header>
+
+    <main class="container">
+        <section class="intro">
+            <span class="tag">SMART COOKING</span>
+            <h1>Biến nguyên liệu thành<br><span>món ăn tuyệt vời</span></h1>
+            <p>Tải ảnh nguyên liệu của bạn và để AI gợi ý những món ăn phù hợp.</p>
+        </section>
+
+        <section class="form-card">
+            <h2>🍃 Tạo công thức nấu ăn</h2>
+            <p class="description">Cung cấp một vài thông tin để AI hỗ trợ bạn nhé!</p>
+
+            <form method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="anh">📷 Ảnh nguyên liệu</label>
+                    <input type="file" id="anh" name="anh"
+                           accept="image/*" required>
+                    <small>Chọn ảnh có chứa nguyên liệu bạn đang có.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="nguyen_lieu_them">🥕 Nguyên liệu bổ sung</label>
+                    <textarea id="nguyen_lieu_them" name="nguyen_lieu_them"
+                              placeholder="Ví dụ: trứng, hành lá, nước mắm...">{{ gia_tri.nguyen_lieu_them }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="khau_phan">👨‍👩‍👧 Số người ăn</label>
+                    <select id="khau_phan" name="khau_phan">
+                        <option value="1 người" {% if gia_tri.khau_phan == "1 người" %}selected{% endif %}>1 người</option>
+                        <option value="2 người" {% if gia_tri.khau_phan == "2 người" %}selected{% endif %}>2 người</option>
+                        <option value="3 người" {% if gia_tri.khau_phan == "3 người" %}selected{% endif %}>3 người</option>
+                        <option value="4 người" {% if gia_tri.khau_phan == "4 người" %}selected{% endif %}>4 người</option>
+                        <option value="5 người" {% if gia_tri.khau_phan == "5 người" %}selected{% endif %}>5 người</option>
+                        <option value="6 người trở lên" {% if gia_tri.khau_phan == "6 người trở lên" %}selected{% endif %}>6 người trở lên</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="yeu_cau">💬 Yêu cầu thêm</label>
+                    <textarea id="yeu_cau" name="yeu_cau"
+                              placeholder="Ví dụ: món ít cay, dễ làm, tiết kiệm...">{{ gia_tri.yeu_cau }}</textarea>
+                </div>
+
+                <button type="submit" class="submit-btn">
+                    ✨ Gợi ý món ăn
+                </button>
+            </form>
+        </section>
+
+        {% if loi %}
+        <section class="result-card error">
+            {{ loi }}
+        </section>
+        {% endif %}
+
+        {% if ket_qua %}
+        <section class="result-card">
+            <h2>🍽️ Kết quả từ AI Chef</h2>
+            <div class="result-content">{{ ket_qua | safe }}</div>
+        </section>
+        {% endif %}
+    </main>
+
+    <footer>
+        <p>Made with 🍀 by AI Chef</p>
+    </footer>
+</body>
+</html>
