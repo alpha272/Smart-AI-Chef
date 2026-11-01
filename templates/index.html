@@ -4,80 +4,281 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Chef - Trợ lý nấu ăn</title>
+
+    <title>AI Chef - Your Personal Cooking Assistant</title>
+
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-<body>
-    <header class="header">
-        <div class="logo">🥑 AI CHEF</div>
-        <p>Your personal AI cooking assistant</p>
-    </header>
 
-    <main class="container">
+<body>
+
+    <div class="container">
+
+        <!-- HEADER -->
+        <header class="header">
+
+            <div class="logo">
+                <span class="logo-icon">♨</span>
+                <span>AI Chef</span>
+            </div>
+
+            <p>Your Personal Cooking Assistant</p>
+
+        </header>
+
+
+        <!-- INTRO -->
         <section class="intro">
-            <span class="tag">SMART COOKING</span>
-            <h1>Biến nguyên liệu thành<br><span>món ăn tuyệt vời</span></h1>
-            <p>Tải ảnh nguyên liệu của bạn và để AI gợi ý những món ăn phù hợp.</p>
+
+            <span class="section-label">WELCOME TO AI CHEF</span>
+
+            <h1>Turn Your Ingredients Into Delicious Meals</h1>
+
+            <p>
+                Upload your ingredients and let AI Chef help you discover
+                delicious recipes that you can make at home.
+            </p>
+
         </section>
 
+
+        <!-- COOKING FORM -->
         <section class="form-card">
-            <h2>🍃 Tạo công thức nấu ăn</h2>
-            <p class="description">Cung cấp một vài thông tin để AI hỗ trợ bạn nhé!</p>
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-label">LET'S GET STARTED</span>
+
+                    <h2>🍃 Tạo công thức nấu ăn</h2>
+
+                    <p>
+                        Cung cấp một vài thông tin để AI hỗ trợ bạn nhé!
+                    </p>
+                </div>
+
+            </div>
+
 
             <form method="POST" enctype="multipart/form-data">
-                <div class="form-group">
-                    <label for="anh">📷 Ảnh nguyên liệu</label>
-                    <input type="file" id="anh" name="anh"
-                           accept="image/*" required>
-                    <small>Chọn ảnh có chứa nguyên liệu bạn đang có.</small>
+
+                <div class="form-grid">
+
+
+                    <!-- INGREDIENT IMAGES -->
+                    <div class="form-group full-width">
+
+                        <label for="anh">📷 Ảnh nguyên liệu</label>
+
+                        <input
+                            type="file"
+                            id="anh"
+                            name="anh"
+                            accept="image/*"
+                            multiple
+                        >
+
+                        <small>
+                            Bạn có thể chọn tối đa 5 ảnh nguyên liệu cùng lúc.
+                        </small>
+
+                    </div>
+
+
+                    <!-- ADDITIONAL INGREDIENTS -->
+                    <div class="form-group">
+
+                        <label for="nguyen_lieu_them">
+                            🥕 Nguyên liệu bổ sung
+                        </label>
+
+                        <textarea
+                            id="nguyen_lieu_them"
+                            name="nguyen_lieu_them"
+                            placeholder="Ví dụ: trứng, hành lá, nước mắm..."
+                        >{{ gia_tri.get('nguyen_lieu_them', '') }}</textarea>
+
+                    </div>
+
+
+                    <!-- SERVINGS -->
+                    <div class="form-group">
+
+                        <label for="khau_phan">
+                            👨‍👩‍👧 Số người ăn
+                        </label>
+
+                        <select id="khau_phan" name="khau_phan">
+
+                            {% for so_nguoi in [
+                                '1 người',
+                                '2 người',
+                                '3 người',
+                                '4 người',
+                                '5 người',
+                                '6 người trở lên'
+                            ] %}
+
+                                <option
+                                    value="{{ so_nguoi }}"
+                                    {% if gia_tri.get('khau_phan', '2 người') == so_nguoi %}selected{% endif %}
+                                >
+                                    {{ so_nguoi }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                    </div>
+
+
+                    <!-- FOOD CATEGORIES -->
+                    <div class="form-group full-width">
+
+                        <label for="danh_muc">
+                            🍽 Danh mục món ăn
+                        </label>
+
+                        <select id="danh_muc" name="danh_muc">
+
+                            {% for danh_muc in [
+                                'Tất cả món ăn',
+                                'Món Việt Nam',
+                                'Món Á',
+                                'Món Âu',
+                                'Món chay',
+                                'Món ăn nhanh',
+                                'Món tráng miệng'
+                            ] %}
+
+                                <option
+                                    value="{{ danh_muc }}"
+                                    {% if gia_tri.get('danh_muc', 'Tất cả món ăn') == danh_muc %}selected{% endif %}
+                                >
+                                    {% if danh_muc == 'Món Việt Nam' %}🇻🇳
+                                    {% elif danh_muc == 'Món Á' %}🥢
+                                    {% elif danh_muc == 'Món Âu' %}🍝
+                                    {% elif danh_muc == 'Món chay' %}🥬
+                                    {% elif danh_muc == 'Món ăn nhanh' %}🍔
+                                    {% elif danh_muc == 'Món tráng miệng' %}🍰
+                                    {% endif %}
+                                    {{ danh_muc }}
+                                </option>
+
+                            {% endfor %}
+
+                        </select>
+
+                        <small>
+                            Chọn loại món ăn mà bạn muốn AI đề xuất.
+                        </small>
+
+                    </div>
+
+
+                    <!-- INGREDIENT SUBSTITUTION -->
+                    <div class="form-group full-width">
+
+                        <label for="nguyen_lieu_thay_the">
+                            🔄 Nguyên liệu muốn thay thế
+                        </label>
+
+                        <input
+                            type="text"
+                            id="nguyen_lieu_thay_the"
+                            name="nguyen_lieu_thay_the"
+                            placeholder="Ví dụ: bơ, sữa tươi, trứng..."
+                            value="{{ gia_tri.get('nguyen_lieu_thay_the', '') }}"
+                        >
+
+                        <small>
+                            Nhập nguyên liệu bạn đang thiếu để AI gợi ý
+                            nguyên liệu thay thế phù hợp.
+                        </small>
+
+                    </div>
+
+
+                    <!-- ADDITIONAL REQUIREMENTS -->
+                    <div class="form-group full-width">
+
+                        <label for="yeu_cau">
+                            💬 Yêu cầu thêm
+                        </label>
+
+                        <textarea
+                            id="yeu_cau"
+                            name="yeu_cau"
+                            placeholder="Ví dụ: món ít cay, dễ làm, tiết kiệm..."
+                        >{{ gia_tri.get('yeu_cau', '') }}</textarea>
+
+                    </div>
+
+
                 </div>
 
-                <div class="form-group">
-                    <label for="nguyen_lieu_them">🥕 Nguyên liệu bổ sung</label>
-                    <textarea id="nguyen_lieu_them" name="nguyen_lieu_them"
-                              placeholder="Ví dụ: trứng, hành lá, nước mắm...">{{ gia_tri.nguyen_lieu_them }}</textarea>
-                </div>
 
-                <div class="form-group">
-                    <label for="khau_phan">👨‍👩‍👧 Số người ăn</label>
-                    <select id="khau_phan" name="khau_phan">
-                        <option value="1 người" {% if gia_tri.khau_phan == "1 người" %}selected{% endif %}>1 người</option>
-                        <option value="2 người" {% if gia_tri.khau_phan == "2 người" %}selected{% endif %}>2 người</option>
-                        <option value="3 người" {% if gia_tri.khau_phan == "3 người" %}selected{% endif %}>3 người</option>
-                        <option value="4 người" {% if gia_tri.khau_phan == "4 người" %}selected{% endif %}>4 người</option>
-                        <option value="5 người" {% if gia_tri.khau_phan == "5 người" %}selected{% endif %}>5 người</option>
-                        <option value="6 người trở lên" {% if gia_tri.khau_phan == "6 người trở lên" %}selected{% endif %}>6 người trở lên</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="yeu_cau">💬 Yêu cầu thêm</label>
-                    <textarea id="yeu_cau" name="yeu_cau"
-                              placeholder="Ví dụ: món ít cay, dễ làm, tiết kiệm...">{{ gia_tri.yeu_cau }}</textarea>
-                </div>
-
+                <!-- SUBMIT BUTTON -->
                 <button type="submit" class="submit-btn">
-                    ✨ Gợi ý món ăn
+                    🍃 Tạo công thức ngay
                 </button>
+
+                <p class="form-note">
+                    AI Chef sẽ giúp bạn biến nguyên liệu thành những món ăn thú vị.
+                </p>
+
             </form>
+
         </section>
 
+
+        <!-- ERROR MESSAGE -->
         {% if loi %}
-        <section class="result-card error">
-            {{ loi }}
-        </section>
-        {% endif %}
 
-        {% if ket_qua %}
         <section class="result-card">
-            <h2>🍽️ Kết quả từ AI Chef</h2>
-            <div class="result-content">{{ ket_qua | safe }}</div>
-        </section>
-        {% endif %}
-    </main>
 
-    <footer>
-        <p>Made with 🍀 by AI Chef</p>
-    </footer>
+            <h2>⚠️ Có lỗi xảy ra</h2>
+
+            <p>{{ loi }}</p>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- RECIPE RESULT -->
+        {% if ket_qua %}
+
+        <section class="result-card">
+
+            <div class="section-heading">
+
+                <div>
+                    <span class="section-label">YOUR AI GENERATED RECIPE</span>
+
+                    <h2>🍽 Kết quả gợi ý món ăn</h2>
+                </div>
+
+            </div>
+
+            <div class="recipe-content">
+                {{ ket_qua | safe }}
+            </div>
+
+        </section>
+
+        {% endif %}
+
+
+        <!-- FOOTER -->
+        <footer class="footer">
+
+            <p>© 2026 AI Chef. Made with ❤️ for food lovers.</p>
+
+        </footer>
+
+    </div>
+
 </body>
 </html>
