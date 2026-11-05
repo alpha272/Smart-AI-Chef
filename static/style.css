@@ -1,3 +1,4 @@
+
 /* ========================================
    1. GLOBAL SETTINGS
 ======================================== */
@@ -11,13 +12,18 @@
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
     color: #3d3428;
+
     background:
-        linear-gradient(rgba(35, 25, 15, 0.48), rgba(35, 25, 15, 0.48)),
+        linear-gradient(
+            rgba(35, 25, 15, 0.48),
+            rgba(35, 25, 15, 0.48)
+        ),
         url("/static/images/background.png");
 
     background-size: cover;
     background-position: center;
     background-attachment: fixed;
+
     min-height: 100vh;
     line-height: 1.6;
 }
@@ -38,10 +44,19 @@ header {
     color: #fff8e9;
 }
 
-header h1 {
+.logo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
     font-size: 36px;
     font-weight: 800;
     letter-spacing: 1px;
+}
+
+.logo-icon {
+    font-size: 35px;
 }
 
 header p {
@@ -58,12 +73,28 @@ header p {
 .intro {
     text-align: center;
     color: #fff8e9;
+
     max-width: 850px;
     margin: 25px auto 35px;
 }
 
-.intro h2 {
-    font-size: 30px;
+.section-label {
+    display: inline-block;
+    color: #a5b17c;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    margin-bottom: 8px;
+}
+
+.intro .section-label {
+    color: #e5d6b7;
+}
+
+.intro h1 {
+    font-size: 32px;
     margin-bottom: 12px;
     line-height: 1.3;
 }
@@ -75,22 +106,42 @@ header p {
 
 
 /* ========================================
-   4. FORM CARD
+   4. SECTION HEADING
+======================================== */
+
+.section-heading {
+    margin-bottom: 25px;
+}
+
+.section-heading h2 {
+    color: #59633b;
+    font-size: 25px;
+}
+
+.section-heading p {
+    color: #827965;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+
+/* ========================================
+   5. FORM CARD
 ======================================== */
 
 .form-card {
     background: #fffaf0;
+
     padding: 35px;
     border-radius: 20px;
+
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+
     margin-bottom: 35px;
 }
 
-.form-card h2 {
+.form-card > .section-heading {
     text-align: center;
-    color: #59633b;
-    font-size: 25px;
-    margin-bottom: 25px;
 }
 
 .form-grid {
@@ -115,9 +166,15 @@ header p {
     font-size: 15px;
 }
 
+.form-group small {
+    color: #827965;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
 
 /* ========================================
-   5. INPUTS AND SELECTS
+   6. INPUTS AND SELECTS
 ======================================== */
 
 input[type="text"],
@@ -126,13 +183,18 @@ input[type="file"],
 select,
 textarea {
     width: 100%;
+
     padding: 13px 15px;
+
     border: 1px solid #d8ceb9;
     border-radius: 10px;
+
     background: #fffdf8;
     color: #3d3428;
+
     font-family: inherit;
     font-size: 15px;
+
     outline: none;
     transition: 0.2s ease;
 }
@@ -157,11 +219,15 @@ input[type="file"] {
 input[type="file"]::file-selector-button {
     background: #78834f;
     color: white;
+
     border: none;
     padding: 9px 15px;
     border-radius: 7px;
+
     margin-right: 12px;
     cursor: pointer;
+
+    transition: 0.2s ease;
 }
 
 input[type="file"]::file-selector-button:hover {
@@ -170,55 +236,134 @@ input[type="file"]::file-selector-button:hover {
 
 
 /* ========================================
-   6. SUBMIT BUTTON
+   7. INGREDIENT RECOMMENDATION MODE
 ======================================== */
 
-button[type="submit"] {
-    display: block;
-    width: 100%;
-    margin-top: 28px;
-    padding: 15px;
-    border: none;
-    border-radius: 12px;
-    background: #737f4b;
-    color: white;
-    font-size: 17px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: 0.25s ease;
+.recommendation-card {
+    background: #f1f2e8;
+
+    border: 1px solid #dce1c9;
+    border-radius: 14px;
+
+    padding: 20px;
 }
 
-button[type="submit"]:hover {
-    background: #5d683b;
-    transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+.recommendation-heading {
+    margin-bottom: 14px;
+}
+
+.recommendation-heading label {
+    display: block;
+
+    color: #4f5b32;
+    font-size: 16px;
+    font-weight: 700;
+
+    margin-bottom: 6px;
+}
+
+.recommendation-heading small {
+    display: block;
+
+    color: #716d5e;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.recommendation-card select {
+    background: #fffdf8;
+    border: 1px solid #cbd2ad;
+
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.recommendation-card select:hover {
+    border-color: #798653;
+}
+
+.recommendation-note {
+    color: #59633b;
+    font-size: 13px;
+
+    margin-top: 12px;
+    line-height: 1.6;
 }
 
 
 /* ========================================
-   7. ERROR MESSAGE
+   8. SUBMIT BUTTON
+======================================== */
+
+.submit-btn,
+button[type="submit"] {
+    display: block;
+    width: 100%;
+
+    margin-top: 28px;
+    padding: 15px;
+
+    border: none;
+    border-radius: 12px;
+
+    background: #737f4b;
+    color: white;
+
+    font-size: 17px;
+    font-weight: 700;
+
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.submit-btn:hover,
+button[type="submit"]:hover {
+    background: #5d683b;
+
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+}
+
+.form-note {
+    text-align: center;
+
+    color: #827965;
+    font-size: 13px;
+
+    margin-top: 15px;
+}
+
+
+/* ========================================
+   9. ERROR MESSAGE
 ======================================== */
 
 .error-message {
     background: #fff0ed;
     color: #a33c2d;
+
     border: 1px solid #edc2b9;
     padding: 15px 18px;
+
     border-radius: 10px;
     margin-bottom: 25px;
+
     font-weight: 600;
 }
 
 
 /* ========================================
-   8. RESULT CARD
+   10. RESULT CARD
 ======================================== */
 
 .result-card {
     background: #fffaf0;
+
     padding: 35px;
     border-radius: 20px;
+
     box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+
     margin-bottom: 40px;
     overflow-wrap: anywhere;
 }
@@ -226,15 +371,18 @@ button[type="submit"]:hover {
 .result-card > h2 {
     color: #59633b;
     text-align: center;
+
     font-size: 27px;
+
     margin-bottom: 25px;
     padding-bottom: 15px;
+
     border-bottom: 2px solid #e8dfcc;
 }
 
 
 /* ========================================
-   9. AI GENERATED CONTENT
+   11. AI GENERATED CONTENT
 ======================================== */
 
 .result-card h1,
@@ -287,7 +435,7 @@ button[type="submit"]:hover {
 
 
 /* ========================================
-   10. FOOD IMAGE FROM UNSPLASH
+   12. FOOD IMAGE FROM UNSPLASH
 ======================================== */
 
 .food-image {
@@ -298,16 +446,20 @@ button[type="submit"]:hover {
 .food-image img {
     display: block;
     width: 100%;
+
     max-height: 380px;
     object-fit: cover;
+
     border-radius: 14px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.12);
 }
 
 .image-credit {
     margin-top: 8px;
+
     font-size: 12px;
     color: #827965;
+
     text-align: right;
 }
 
@@ -322,13 +474,15 @@ button[type="submit"]:hover {
 
 
 /* ========================================
-   11. RESULT TABLE
+   13. RESULT TABLE
 ======================================== */
 
 .result-card table {
     width: 100%;
+
     border-collapse: collapse;
     margin: 18px 0;
+
     overflow: hidden;
     border-radius: 10px;
 }
@@ -351,19 +505,21 @@ button[type="submit"]:hover {
 
 
 /* ========================================
-   12. FOOTER
+   14. FOOTER
 ======================================== */
 
-footer {
+.footer {
     text-align: center;
+
     padding: 20px 0 30px;
+
     color: #fff8e9;
     font-size: 13px;
 }
 
 
 /* ========================================
-   13. RESPONSIVE - TABLET
+   15. RESPONSIVE - TABLET
 ======================================== */
 
 @media (max-width: 768px) {
@@ -372,12 +528,12 @@ footer {
         width: 92%;
     }
 
-    header h1 {
+    .logo {
         font-size: 30px;
     }
 
-    .intro h2 {
-        font-size: 25px;
+    .intro h1 {
+        font-size: 27px;
     }
 
     .form-card,
@@ -400,7 +556,7 @@ footer {
 
 
 /* ========================================
-   14. RESPONSIVE - MOBILE
+   16. RESPONSIVE - MOBILE
 ======================================== */
 
 @media (max-width: 480px) {
@@ -409,7 +565,7 @@ footer {
         padding: 18px 0;
     }
 
-    header h1 {
+    .logo {
         font-size: 27px;
     }
 
@@ -417,7 +573,7 @@ footer {
         margin: 18px auto 25px;
     }
 
-    .intro h2 {
+    .intro h1 {
         font-size: 22px;
     }
 
@@ -431,7 +587,7 @@ footer {
         border-radius: 14px;
     }
 
-    .form-card h2,
+    .section-heading h2,
     .result-card > h2 {
         font-size: 22px;
     }
@@ -452,7 +608,16 @@ footer {
         max-height: 230px;
     }
 
+    .submit-btn,
     button[type="submit"] {
         font-size: 16px;
+    }
+
+    .recommendation-card {
+        padding: 15px;
+    }
+
+    .recommendation-heading label {
+        font-size: 15px;
     }
 }

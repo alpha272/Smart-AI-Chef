@@ -174,7 +174,7 @@ def dinh_dang_ket_qua(noi_dung):
         r"<h3>(.*?)</h3>",
         xu_ly_tieu_de,
         html_result,
-        flags=re.IGNORECASE
+        flags=re.IGNORECASE | re.DOTALL
     )
 
     # Cho phép các thẻ cần thiết
@@ -214,15 +214,73 @@ def goi_y_mon_an(
     khau_phan,
     danh_muc,
     nguyen_lieu_thay_the,
-    yeu_cau
+    yeu_cau,
+    che_do_goi_y
 ):
+
+    # Xác định cách AI được phép đề xuất nguyên liệu
+    if che_do_goi_y == "bat":
+
+        yeu_cau_nguyen_lieu = """
+CHẾ ĐỘ GỢI Ý NGUYÊN LIỆU: ĐANG BẬT
+
+Bạn được phép đề xuất thêm nguyên liệu nếu cần thiết
+để tạo ra những món ăn phù hợp và đa dạng hơn.
+
+Tuy nhiên, phải tuân thủ các quy tắc:
+
+- Phân biệt rõ nguyên liệu người dùng đang có
+  và nguyên liệu bạn đề xuất bổ sung.
+
+- Không được ghi nguyên liệu đề xuất thành nguyên liệu
+  mà người dùng đã có.
+
+- Với mỗi món ăn, chia nguyên liệu thành hai nhóm:
+  1. Nguyên liệu người dùng đã có.
+  2. Nguyên liệu cần bổ sung hoặc mua thêm.
+
+- Ghi rõ định lượng của từng nguyên liệu.
+
+- Chỉ đề xuất những nguyên liệu thực sự cần thiết.
+
+- Cuối phần gợi ý món ăn, tạo danh sách mua sắm
+  tổng hợp những nguyên liệu người dùng còn thiếu.
+
+- Nếu món ăn không cần mua thêm nguyên liệu,
+  hãy ghi rõ không cần mua thêm.
+"""
+
+    else:
+
+        yeu_cau_nguyen_lieu = """
+CHẾ ĐỘ GỢI Ý NGUYÊN LIỆU: ĐANG TẮT
+
+Ưu tiên tuyệt đối những nguyên liệu người dùng đã cung cấp.
+
+- Chỉ đề xuất những món có thể chế biến chủ yếu
+  từ nguyên liệu nhận diện trong ảnh và nguyên liệu bổ sung.
+
+- Không tự ý thêm nguyên liệu chính mà người dùng không có.
+
+- Không đề xuất món ăn nếu món đó cần nhiều nguyên liệu
+  quan trọng mà người dùng chưa cung cấp.
+
+- Có thể đề cập một số gia vị cơ bản nếu thực sự cần thiết,
+  nhưng phải ghi rõ đó là gia vị cần có thêm nếu người dùng chưa xác nhận.
+
+- Không giả định người dùng đang có những nguyên liệu
+  mà họ chưa cung cấp.
+"""
 
     prompt = f"""
 Bạn là AI Chef, trợ lý nấu ăn bằng tiếng Việt.
 
 NHIỆM VỤ:
+
 Phân tích tất cả hình ảnh nguyên liệu người dùng cung cấp.
+
 Nhận diện những nguyên liệu có thể nhìn thấy trong ảnh.
+
 Không khẳng định chắc chắn nếu hình ảnh không rõ.
 
 THÔNG TIN NGƯỜI DÙNG:
@@ -237,19 +295,33 @@ YÊU CẦU VỀ DANH MỤC:
 
 - Nếu người dùng chọn "Tất cả món ăn",
   hãy tự do đề xuất những món phù hợp với nguyên liệu.
+
 - Nếu người dùng chọn danh mục cụ thể,
   tất cả món được đề xuất phải thuộc danh mục đó.
+
 - Không đề xuất món nằm ngoài danh mục đã chọn.
+
+YÊU CẦU VỀ CHẾ ĐỘ NGUYÊN LIỆU:
+
+{yeu_cau_nguyen_lieu}
 
 YÊU CẦU VỀ THAY THẾ NGUYÊN LIỆU:
 
 - Nếu người dùng nhập nguyên liệu muốn thay thế,
   hãy đề xuất từ 2 đến 3 nguyên liệu thay thế phù hợp.
+
 - Giải thích vì sao có thể sử dụng nguyên liệu thay thế đó.
-- Đưa ra lượng sử dụng tham khảo tương ứng với nguyên liệu ban đầu.
-- Nêu rõ sự khác biệt về hương vị, kết cấu hoặc cách chế biến.
+
+- Đưa ra lượng sử dụng tham khảo tương ứng
+  với nguyên liệu ban đầu.
+
+- Nêu rõ sự khác biệt về hương vị, kết cấu
+  hoặc cách chế biến.
+
 - Nếu không có nguyên liệu thay thế phù hợp,
-  hãy nói rõ thay vì đưa ra gợi ý không an toàn hoặc không hợp lý.
+  hãy nói rõ thay vì đưa ra gợi ý không an toàn
+  hoặc không hợp lý.
+
 - Nếu người dùng không nhập nguyên liệu muốn thay thế,
   không cần tạo phần thay thế.
 
@@ -258,6 +330,7 @@ YÊU CẦU ĐẦU RA:
 ## 1. Nguyên liệu nhận diện
 
 Liệt kê những nguyên liệu nhìn thấy trong ảnh.
+
 Phân biệt nguyên liệu chắc chắn và nguyên liệu chưa rõ.
 
 ## 2. Gợi ý món ăn
@@ -268,36 +341,61 @@ và danh mục đã chọn.
 Với mỗi món, trình bày:
 
 ### Tên món ăn
+
 - Mô tả ngắn.
 - Mức độ khó.
 - Thời gian chuẩn bị và nấu.
 
 ### Nguyên liệu cần thiết
+
 Liệt kê nguyên liệu và định lượng phù hợp với {khau_phan}.
 
+Nếu chế độ gợi ý nguyên liệu đang bật,
+chia thành nguyên liệu đã có và nguyên liệu cần bổ sung.
+
+Nếu chế độ đang tắt,
+ưu tiên sử dụng nguyên liệu người dùng đã cung cấp.
+
 ### Cách chế biến
+
 Hướng dẫn từng bước rõ ràng, dễ thực hiện.
 
 ### Mẹo nấu ăn
+
 Đưa ra một vài mẹo giúp món ăn ngon hơn.
 
-## 3. Nguyên liệu thay thế
+## 3. Danh sách nguyên liệu cần mua
+
+Chỉ tạo phần này khi chế độ gợi ý nguyên liệu đang bật.
+
+Tổng hợp những nguyên liệu còn thiếu
+để thực hiện các món ăn đã đề xuất.
+
+Không đưa nguyên liệu người dùng đã có vào danh sách này.
+
+Nếu không cần mua thêm nguyên liệu,
+hãy ghi rõ điều đó.
+
+## 4. Nguyên liệu thay thế
 
 Chỉ hiển thị phần này nếu người dùng có nhập
 nguyên liệu muốn thay thế.
 
 Trình bày:
+
 - Nguyên liệu ban đầu.
 - Các nguyên liệu có thể thay thế.
 - Tỉ lệ thay thế tham khảo.
 - Lưu ý khi sử dụng.
 
 LƯU Ý:
+
 - Ưu tiên tận dụng nguyên liệu người dùng đang có.
 - Không tự ý thêm quá nhiều nguyên liệu không cần thiết.
 - Hướng dẫn dễ hiểu cho người mới nấu ăn.
 - Trả lời hoàn toàn bằng tiếng Việt.
 - Với mỗi món ăn, hãy dùng tiêu đề ### với tên món ăn thực tế.
+- Không tự bịa ra nguyên liệu đã nhận diện nếu ảnh không rõ.
 """
 
     noi_dung_gui = [prompt] + danh_sach_anh
@@ -325,7 +423,8 @@ def index():
         "khau_phan": "2 người",
         "danh_muc": "Tất cả món ăn",
         "nguyen_lieu_thay_the": "",
-        "yeu_cau": ""
+        "yeu_cau": "",
+        "che_do_goi_y": "bat"
     }
 
     ket_qua = None
@@ -354,6 +453,14 @@ def index():
         gia_tri["yeu_cau"] = request.form.get(
             "yeu_cau", ""
         )
+
+        # Get ingredient recommendation mode
+        che_do = request.form.get("che_do_goi_y", "bat")
+
+        if che_do not in ["bat", "tat"]:
+            che_do = "bat"
+
+        gia_tri["che_do_goi_y"] = che_do
 
         # Get uploaded images
 
@@ -404,7 +511,8 @@ def index():
                     gia_tri["khau_phan"],
                     gia_tri["danh_muc"],
                     gia_tri["nguyen_lieu_thay_the"],
-                    gia_tri["yeu_cau"]
+                    gia_tri["yeu_cau"],
+                    gia_tri["che_do_goi_y"]
                 )
 
             except Exception as e:
@@ -436,7 +544,8 @@ def file_too_large(error):
         "khau_phan": "2 người",
         "danh_muc": "Tất cả món ăn",
         "nguyen_lieu_thay_the": "",
-        "yeu_cau": ""
+        "yeu_cau": "",
+        "che_do_goi_y": "bat"
     }
 
     return render_template(

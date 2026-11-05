@@ -1,11 +1,12 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>AI Chef - Your Personal Cooking Assistant</title>
+    <title>Michelin 5 Stars - Your Personal Cooking Assistant</title>
 
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
@@ -16,29 +17,25 @@
 
         <!-- HEADER -->
         <header class="header">
-
             <div class="logo">
                 <span class="logo-icon">♨</span>
-                <span>AI Chef</span>
+                <span>Michelin 5 Stars</span>
             </div>
 
             <p>Your Personal Cooking Assistant</p>
-
         </header>
 
 
         <!-- INTRO -->
         <section class="intro">
-
-            <span class="section-label">WELCOME TO AI CHEF</span>
+            <span class="section-label">WELCOME TO MICHELIN 5 STARS</span>
 
             <h1>Turn Your Ingredients Into Delicious Meals</h1>
 
             <p>
-                Upload your ingredients and let AI Chef help you discover
+                Upload your ingredients and let Michelin 5 Stars help you discover
                 delicious recipes that you can make at home.
             </p>
-
         </section>
 
 
@@ -46,7 +43,6 @@
         <section class="form-card">
 
             <div class="section-heading">
-
                 <div>
                     <span class="section-label">LET'S GET STARTED</span>
 
@@ -56,7 +52,6 @@
                         Cung cấp một vài thông tin để AI hỗ trợ bạn nhé!
                     </p>
                 </div>
-
             </div>
 
 
@@ -129,6 +124,57 @@
                             {% endfor %}
 
                         </select>
+
+                    </div>
+
+
+                    <!-- INGREDIENT RECOMMENDATION MODE -->
+                    <div class="form-group full-width">
+
+                        <div class="recommendation-card">
+
+                            <div class="recommendation-heading">
+                                <div>
+
+                                    <label for="che_do_goi_y">
+                                        ✨ Chế độ gợi ý nguyên liệu
+                                    </label>
+
+                                    <small>
+                                        Bạn có muốn AI đề xuất thêm nguyên liệu
+                                        để tạo ra nhiều món ăn đa dạng hơn không?
+                                    </small>
+
+                                </div>
+                            </div>
+
+                            <select
+                                id="che_do_goi_y"
+                                name="che_do_goi_y"
+                            >
+
+                                <option
+                                    value="bat"
+                                    {% if gia_tri.get('che_do_goi_y', 'bat') == 'bat' %}selected{% endif %}
+                                >
+                                    Bật – Cho phép AI gợi ý thêm nguyên liệu
+                                </option>
+
+                                <option
+                                    value="tat"
+                                    {% if gia_tri.get('che_do_goi_y', 'bat') == 'tat' %}selected{% endif %}
+                                >
+                                    Tắt – Chỉ sử dụng nguyên liệu hiện có
+                                </option>
+
+                            </select>
+
+                            <p class="recommendation-note">
+                                💡 Khi bật, AI sẽ phân biệt nguyên liệu bạn
+                                đang có và nguyên liệu cần bổ sung.
+                            </p>
+
+                        </div>
 
                     </div>
 
@@ -225,7 +271,7 @@
                 </button>
 
                 <p class="form-note">
-                    AI Chef sẽ giúp bạn biến nguyên liệu thành những món ăn thú vị.
+                    Michelin 5 Stars sẽ giúp bạn biến nguyên liệu thành những món ăn thú vị.
                 </p>
 
             </form>
@@ -274,9 +320,10 @@
         <!-- FOOTER -->
         <footer class="footer">
 
-            <p>© 2026 AI Chef. Made with ❤️ for food lovers.</p>
+            <p>© 2026 Michelin 5 Stars. Made with ❤️ for food lovers.</p>
 
         </footer>
+
 
     </div>
 
